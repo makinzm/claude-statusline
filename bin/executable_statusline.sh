@@ -124,6 +124,9 @@ else
     pct_used=0
 fi
 
+cost_usd=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
+cost_fmt=$(printf "%.2f" "$cost_usd" 2>/dev/null || echo "0.00")
+
 effort="default"
 settings_path="$HOME/.claude/settings.json"
 if [ -f "$settings_path" ]; then
@@ -170,7 +173,7 @@ fi
 
 line1="${blue}${model_name}${reset}"
 line1+="${sep}"
-line1+="✍️ ${pct_color}${pct_used}%${reset}"
+line1+="✍️ ${pct_color}${pct_used}%${reset} ${dim}\$${reset}${white}${cost_fmt}${reset}"
 line1+="${sep}"
 line1+="${skip_perms}${cyan}${dirname}${reset}"
 if [ -n "$git_branch" ]; then
